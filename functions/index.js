@@ -3,9 +3,10 @@ const SearchTagger = require('./SearchTagger');
 
 exports.onUpdateUserSearchHandler = functions.firestore.document('/users/{documentId}')
     .onUpdate((change, context) => {
-        // let tagger = new SearchTagger({minimum: 3, maximum:10, removeAccents:true});
-        let tagger = new SearchTagger();
+        let tagger = new SearchTagger({minimum: 3});
+        // let tagger = new SearchTagger({});
         const tags = tagger.searchTagsOf(change.after.data().name, change.after.data().surname)
+        console.log(tags)
         return change.after.ref.set({ searchTags: tags }, { merge: true });
     })
 
